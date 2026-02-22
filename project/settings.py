@@ -32,6 +32,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://felhoalapu-lab3-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com',
+]
 
 # Application definition
 
