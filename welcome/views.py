@@ -1,27 +1,43 @@
-import os
-from django.shortcuts import render
-from django.conf import settings
-from django.http import HttpResponse
+﻿import json
 
-from . import database
-from .models import PageView
+from django.shortcuts import render, redirect, get_object_or_404
 
-# Create your views here.
+from .models import Photo
+from .forms import PhotoForm
 
 def index(request):
-    """Takes an request object as a parameter and creates an pageview object then responds by rendering the index view."""
-    hostname = os.getenv('HOSTNAME', 'unknown')
-    PageView.objects.create(hostname=hostname)
+    sort_by = request.GET.get('sort', '-upload_date')
+    
+    allowed_sorts = ['name', '-name', 'upload_date', '-upload_date']
+    if sort_by not in allowed_sorts:
+        sort_by = '-upload_date'
+        
+    photos = Photo.objects.all().order_by(sort_by)
+    return render(request, 'welcome/index.html', {'photos': photos})
 
-    return render(request, 'welcome/index.html', {
-        'hostname': hostname,
-        'database': database.info(),
-        'count': PageView.objects.count()
+def view_photo(request, photo_id):
+    photo = get_object_or_404(Photo, id=photo_id)
+    return render(request, 'welcome/view.html', {'photo': photo})
+
+def upload_photo(request):
+    if request.method == 'POST':
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = PhotoForm()
+        
+    names = list(Photo.objects.values_list('name', flat=True))
+        
+    return render(request, 'welcome/upload.html', {
+        'form': form,
+        'existing_names_json': json.dumps(names)
     })
 
-def health(request):
-    """Takes an request as a parameter and gives the count of pageview objects as reponse"""
-    return HttpResponse(PageView.objects.count())
-
-def hello(request):
-    return HttpResponse("Hello, world. Hello, Django.")
+def delete_photo(request, photo_id):
+    if request.method == 'POST':
+        photo = get_object_or_404(Photo, id=photo_id)
+        photo.image.delete()
+        photo.delete()
+    return redirect('index')

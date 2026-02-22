@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Photo</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload a New Photo</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" style="padding: 10px;">Save Photo</button>
+        <a href="{% url 'index' %}" style="margin-left: 10px;">Cancel</a>
+    </form>
+
+    <script>
+        const existingNames = JSON.parse('{{ existing_names_json|escapejs }}');
+
+        const form = document.querySelector('form');
+        const imageInput = document.getElementById('id_image');
+        const nameInput = document.getElementById('id_name');
+
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                let fileName = this.files[0].name;
+                let baseName = fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
+                nameInput.value = baseName.substring(0, 40);
+            }
+        });
+
+        form.addEventListener('submit', function(event) {
+            const chosenName = nameInput.value.trim();
+
+            if (existingNames.includes(chosenName)) {
+                event.preventDefault();
+                alert('Error: A photo with this name already exists.');
+                nameInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>
