@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <title>Photo Gallery App</title>
+    <title>Photo Album App</title>
     <style>
         body {
             font-family: sans-serif;
@@ -51,10 +51,25 @@
     </style>
 </head>
 <body>
+    <div style="text-align: right; margin-bottom: 20px;">
+        {% if user.is_authenticated %}
+        Welcome, <strong>{{ user.username }}</strong>! |
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:#0066cc; cursor:pointer; text-decoration:underline; font-size:16px; padding:0;">Logout</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a> |
+        <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+
     <h1>Photo Album</h1>
 
     <div class="controls">
+        {% if user.is_authenticated %}
         <a href="{% url 'upload' %}"><button style="padding: 10px; cursor: pointer;">+ Upload New Photo</button></a>
+        {% endif %}
 
         <span style="margin-left: 20px;"><strong>Sort by:</strong> </span>
         <a href="?sort=name">Name (A-Z)</a> |
@@ -77,10 +92,14 @@
             </div>
         </div>
         <div>
+            {% if photo.user == user %}
             <form action="{% url 'delete_photo' photo.id %}" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" onclick="return confirm('Biztosan törölni szeretnéd? (Are you sure?)');">Delete</button>
+                <button type="submit" onclick="return confirm('Are you sure?');">Delete</button>
             </form>
+            {% else %}
+            <small style="color: #999;">Uploaded by {{ photo.user.username }}</small>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
