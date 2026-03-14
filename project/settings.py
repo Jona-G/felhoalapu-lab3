@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://felhoalapu-lab3-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com',
+    'https://felhoalapu-lab3-felhoalapu-lab.apps.okd.fured.cloud.bme.hu'
 ]
 
 # Application definition
