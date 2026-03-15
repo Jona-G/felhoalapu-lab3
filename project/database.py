@@ -6,12 +6,12 @@ def config():
     
     if engine == 'postgresql':
         return {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.getenv('DATABASE_NAME', 'sampledb'),
-            'USER': os.getenv('DATABASE_USER', 'myuser'),
-            'PASSWORD': os.getenv('DATABASE_PASSWORD', 'mypassword'),
-            'HOST': os.getenv('DATABASE_HOST', 'postgresql'),
-            'PORT': os.getenv('DATABASE_PORT', '5432'),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgresdb',
+            'USER': 'myuser',
+            'PASSWORD': 'mypassword',
+            'HOST': 'postgresdb',
+            'PORT': '5432'
         }
     
     # Fallback to local SQLite
