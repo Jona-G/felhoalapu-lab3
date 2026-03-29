@@ -1,6 +1,6 @@
 # Fényképalbum
 
-**OpenShift** PaaS környezetbe deploy-olható **Django** keretrendszerrel és **SQLite** lokális adatbázissal elkészített fényképalbum alkalmazás.
+**OpenShift** PaaS környezetbe deploy-olható **Django** keretrendszerrel és **PostgreSQL** adatbázissal elkészített fényképalbum alkalmazás.
 
 ## A program funkciói
 - **Fényképek feltöltése az albumba:**
