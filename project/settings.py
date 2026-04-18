@@ -28,9 +28,13 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'django-album-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://felhoalapu-lab3-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com',
