@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "django_app" {
+resource "kubernetes_deployment_v1" "django_app" {
   metadata {
     name      = "django-album"
     namespace = var.namespace
@@ -15,7 +15,7 @@ resource "kubernetes_deployment" "django_app" {
       spec {
         container {
           name  = "django"
-          image = "KEP_ELERESE_A_REGISTRYBOL"
+          image = "image-registry.openshift-image-registry.svc:5000/jonatanpribek-dev/felhoalapu-lab3@sha256:c868a0a5868fe7b5921c012396159da4ae1688718ce5fcc2ea67c6f6058d5c70"
           
           resources {
             limits = {
@@ -33,7 +33,7 @@ resource "kubernetes_deployment" "django_app" {
   }
 }
 
-resource "kubernetes_horizontal_pod_autoscaler" "django_hpa" {
+resource "kubernetes_horizontal_pod_autoscaler_v1" "django_hpa" {
   metadata {
     name      = "django-hpa"
     namespace = var.namespace
@@ -43,6 +43,7 @@ resource "kubernetes_horizontal_pod_autoscaler" "django_hpa" {
     min_replicas = 1
     target_cpu_utilization_percentage = 50
     scale_target_ref {
+      api_version = "apps/v1"
       kind = "Deployment"
       name = "django-album"
     }

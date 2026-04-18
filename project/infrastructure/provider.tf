@@ -7,6 +7,20 @@ terraform {
   }
 }
 
+variable "openshift_server" {
+  description = "Az OpenShift API cime"
+  type        = string
+}
+
+variable "openshift_token" {
+  description = "Az OpenShift hozzaferesi token"
+  type        = string
+  sensitive   = true
+}
+
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  host  = var.openshift_server
+  token = var.openshift_token
+  
+  insecure = true 
 }
