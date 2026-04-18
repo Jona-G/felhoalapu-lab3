@@ -92,6 +92,7 @@ resource "kubernetes_ingress_v1" "django_route" {
   }
   spec {
     rule {
+      host = "django-album-${var.namespace}.apps.rm1.0a51.p1.openshiftapps.com"
       http {
         path {
           path      = "/"
