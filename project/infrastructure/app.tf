@@ -2,6 +2,11 @@ resource "kubernetes_deployment_v1" "django_app" {
   metadata {
     name      = "django-album"
     namespace = var.namespace
+    labels = {
+      "app"                           = "django"
+      "app.kubernetes.io/part-of"     = "photo-album-app"
+      "app.openshift.io/runtime"      = "python"
+    }
   }
   spec {
     replicas = 1
@@ -10,7 +15,10 @@ resource "kubernetes_deployment_v1" "django_app" {
     }
     template {
       metadata {
-        labels = { app = "django" }
+        labels = {
+          "app"                       = "django"
+          "app.kubernetes.io/part-of" = "photo-album-app"
+        }
       }
       spec {
         container {
@@ -54,9 +62,14 @@ resource "kubernetes_service_v1" "django_svc" {
   metadata {
     name      = "django-album"
     namespace = var.namespace
+    labels = {
+      "app.kubernetes.io/part-of" = "photo-album-app"
+    }
   }
   spec {
-    selector = { app = "django" }
+    selector = {
+      "app" = "django"
+    }
     port {
       port        = 8080
       target_port = 8080
@@ -68,16 +81,22 @@ resource "kubernetes_ingress_v1" "django_route" {
   metadata {
     name      = "django-album-route"
     namespace = var.namespace
+    labels = {
+      "app.kubernetes.io/part-of" = "photo-album-app"
+    }
+    annotations = {
+      "route.openshift.io/termination" = "edge"
+    }
   }
   spec {
     rule {
       http {
         path {
-          path      = "/"
+          path = "/"
           path_type = "Prefix"
           backend {
             service {
-              name = kubernetes_service_v1.django_svc.metadata[0].name
+              name = "django-album"
               port {
                 number = 8080
               }
