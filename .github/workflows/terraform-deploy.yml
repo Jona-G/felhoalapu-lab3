@@ -27,11 +27,11 @@ jobs:
           kubectl config use-context okd-context
 
       - name: Terraform Init
-        working-directory: ./infrastructure
+        working-directory: ./project/infrastructure
         run: terraform init
 
       - name: Terraform Apply
-        working-directory: ./infrastructure
+        working-directory: ./project/infrastructure
         env:
           TF_VAR_openshift_server: ${{ secrets.OPENSHIFT_SERVER }}
           TF_VAR_openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
