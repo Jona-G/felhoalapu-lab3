@@ -49,3 +49,42 @@ resource "kubernetes_horizontal_pod_autoscaler_v1" "django_hpa" {
     }
   }
 }
+
+resource "kubernetes_service_v1" "django_svc" {
+  metadata {
+    name      = "django-album"
+    namespace = var.namespace
+  }
+  spec {
+    selector = { app = "django" }
+    port {
+      port        = 8080
+      target_port = 8080
+    }
+  }
+}
+
+resource "kubernetes_ingress_v1" "django_route" {
+  metadata {
+    name      = "django-album-route"
+    namespace = var.namespace
+  }
+  spec {
+    rule {
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = kubernetes_service_v1.django_svc.metadata[0].name
+              port {
+                number = 8080
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
