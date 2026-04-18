@@ -23,7 +23,8 @@ resource "kubernetes_deployment_v1" "django_app" {
       spec {
         container {
           name  = "django"
-          image = "image-registry.openshift-image-registry.svc:5000/jonatanpribek-dev/felhoalapu-lab3:latest"          image_pull_policy = "Always"
+          image = "image-registry.openshift-image-registry.svc:5000/jonatanpribek-dev/felhoalapu-lab3:latest"
+          image_pull_policy = "Always"
           resources {
             limits = {
               cpu    = "200m"
