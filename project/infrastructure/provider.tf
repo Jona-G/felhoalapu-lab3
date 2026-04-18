@@ -1,4 +1,8 @@
 terraform {
+  backend "kubernetes" {
+    secret_suffix = "state"
+    namespace     = "jonatanpribek-dev"
+  }
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
