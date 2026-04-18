@@ -77,27 +77,34 @@ resource "kubernetes_service_v1" "django_svc" {
   }
 }
 
-resource "kubernetes_manifest" "django_route" {
-  manifest = {
-    "apiVersion" = "route.openshift.io/v1"
-    "kind"       = "Route"
-    "metadata" = {
-      "name"      = "django-album-route"
-      "namespace" = var.namespace
-      "labels" = {
-        "app.kubernetes.io/part-of" = "photo-album-app"
-      }
+resource "kubernetes_ingress_v1" "django_route" {
+  metadata {
+    name      = "django-album-route"
+    namespace = var.namespace
+    annotations = {
+      "route.openshift.io/termination" = "edge"
+      
+      "app.openshift.io/v1-alpha1.route-type" = "http"
     }
-    "spec" = {
-      "to" = {
-        "kind" = "Service"
-        "name" = kubernetes_service_v1.django_svc.metadata[0].name 
-      }
-      "port" = {
-        "targetPort" = 8080
-      }
-      "tls" = {
-        "termination" = "edge"
+    labels = {
+      "app.kubernetes.io/part-of" = "photo-album-app"
+    }
+  }
+  spec {
+    rule {
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = kubernetes_service_v1.django_svc.metadata[0].name
+              port {
+                number = 8080
+              }
+            }
+          }
+        }
       }
     }
   }
