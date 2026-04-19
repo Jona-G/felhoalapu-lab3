@@ -26,13 +26,13 @@ jobs:
           kubectl config set-context okd-context --cluster=okd --user=github-action --namespace=jonatanpribek-dev --kubeconfig=/tmp/kubeconfig
           kubectl config use-context okd-context --kubeconfig=/tmp/kubeconfig
 
+          kubectl delete lease --all -n jonatanpribek-dev --kubeconfig=/tmp/kubeconfig || true
+
       - name: Terraform Init
         working-directory: ./project/infrastructure
         env:
           KUBE_CONFIG_PATH: /tmp/kubeconfig
-        run: |
-          terraform init || true
-          terraform force-unlock -force 0bd52ae0-1622-02c1-8632-816cdd60ecef
+        run: terraform init
 
       - name: Terraform Apply
         working-directory: ./project/infrastructure
@@ -42,4 +42,4 @@ jobs:
           TF_VAR_openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
           TF_VAR_namespace: "jonatanpribek-dev"
-        run: terraform apply -auto-approve
+        run: terraform apply -lock=false -auto-approve
