@@ -23,7 +23,7 @@ resource "kubernetes_deployment_v1" "django_app" {
       spec {
         container {
           name  = "django"
-          image = "image-registry.openshift-image-registry.svc:5000/jonatanpribek-dev/felhoalapu-lab3:latest"
+          image = "image-registry.openshift-image-registry.svc:5000/jonatanpribek-dev/felhoalapu-lab3@sha256:c868a0a5868fe7b5921c012396159da4ae1688718ce5fcc2ea67c6f6058d5c70"
           image_pull_policy = "Always"
           
           env {
