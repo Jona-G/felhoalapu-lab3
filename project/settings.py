@@ -31,6 +31,7 @@ SECRET_KEY = os.getenv(
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    'felhoalapu-lab3-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com',
     'django-album-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com',
     'localhost',
     '127.0.0.1'
@@ -38,11 +39,12 @@ ALLOWED_HOSTS = [
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
     'https://felhoalapu-lab3-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com',
-    'https://felhoalapu-lab3-felhoalapu-lab.apps.okd.fured.cloud.bme.hu',
-    'https://django-album-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com'
+    'https://django-album-jonatanpribek-dev.apps.rm1.0a51.p1.openshiftapps.com',
 ]
 
 # Application definition

@@ -1,6 +1,6 @@
 resource "kubernetes_deployment_v1" "django_app" {
   metadata {
-    name      = "django-album"
+    name      = "felhoalapu-lab3"
     namespace = var.namespace
     labels = {
       "app"                           = "django"
@@ -23,7 +23,7 @@ resource "kubernetes_deployment_v1" "django_app" {
       spec {
         container {
           name  = "django"
-          image = "image-registry.openshift-image-registry.svc:5000/jonatanpribek-dev/felhoalapu-lab3:latest"
+          image = "image-registry.openshift-image-registry.svc:5000/jonatanpribek-dev/felhoalapu-lab3@sha256:c868a0a5868fe7b5921c012396159da4ae1688718ce5fcc2ea67c6f6058d5c70"
           image_pull_policy = "Always"
           resources {
             limits = {
@@ -53,14 +53,14 @@ resource "kubernetes_horizontal_pod_autoscaler_v1" "django_hpa" {
     scale_target_ref {
       api_version = "apps/v1"
       kind = "Deployment"
-      name = "django-album"
+      name = "felhoalapu-lab3"
     }
   }
 }
 
 resource "kubernetes_service_v1" "django_svc" {
   metadata {
-    name      = "django-album"
+    name      = "felhoalapu-lab3"
     namespace = var.namespace
     labels = {
       "app.kubernetes.io/part-of" = "photo-album-app"
@@ -79,7 +79,7 @@ resource "kubernetes_service_v1" "django_svc" {
 
 resource "kubernetes_ingress_v1" "django_route" {
   metadata {
-    name      = "django-album-route"
+    name      = "felhoalapu-lab3-route"
     namespace = var.namespace
     annotations = {
       "route.openshift.io/termination" = "edge"
@@ -92,7 +92,7 @@ resource "kubernetes_ingress_v1" "django_route" {
   }
   spec {
     rule {
-      host = "django-album-${var.namespace}.apps.rm1.0a51.p1.openshiftapps.com"
+      host = "felhoalapu-lab3-${var.namespace}.apps.rm1.0a51.p1.openshiftapps.com"
       http {
         path {
           path      = "/"

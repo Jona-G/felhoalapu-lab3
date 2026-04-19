@@ -18,6 +18,10 @@ resource "kubernetes_deployment_v1" "postgres" {
   metadata {
     name      = "postgresdb"
     namespace = var.namespace
+    labels = {
+      "app"                       = "postgres"
+      "app.kubernetes.io/part-of" = "photo-album-app"
+    }
   }
   spec {
     replicas = 1
@@ -26,7 +30,9 @@ resource "kubernetes_deployment_v1" "postgres" {
     }
     template {
       metadata {
-        labels = { app = "postgres" }
+        labels = {
+          app = "postgres"
+          "app.kubernetes.io/part-of" = "photo-album-app"
       }
       spec {
         container {
@@ -64,6 +70,9 @@ resource "kubernetes_service_v1" "postgres_svc" {
   metadata {
     name      = "postgresdb"
     namespace = var.namespace
+    labels = {
+      "app.kubernetes.io/part-of" = "photo-album-app"
+    }
   }
   spec {
     selector = { app = "postgres" }
