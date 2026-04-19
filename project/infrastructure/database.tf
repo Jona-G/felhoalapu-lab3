@@ -33,6 +33,7 @@ resource "kubernetes_deployment_v1" "postgres" {
         labels = {
           app = "postgres"
           "app.kubernetes.io/part-of" = "photo-album-app"
+        }
       }
       spec {
         container {
